@@ -431,11 +431,12 @@ open class BaseNotificationBanner: UIView {
                    before it finished animating or if it is meant to be shown infinitely
                 */
                 if !self.isSuspended && self.autoDismiss {
-                    self.perform(
-                        #selector(self.dismiss),
-                        with: nil,
-                        afterDelay: self.duration
-                    )
+                    if self.duration == 0.0 {
+                        self.perform(#selector(self.dismiss), with: nil, afterDelay: .infinity)
+                    }
+                    else {
+                        self.perform(#selector(self.dismiss), with: nil, afterDelay: self.duration)
+                    }
                 }
             }
         }
@@ -481,8 +482,12 @@ open class BaseNotificationBanner: UIView {
                 selector: #selector(dismiss),
                 object: nil
              )
-            
-             self.perform(#selector(dismiss), with: nil, afterDelay: self.duration)
+            if self.duration == 0.0 {
+                self.perform(#selector(dismiss), with: nil, afterDelay: .infinity)
+            }
+            else {
+                self.perform(#selector(dismiss), with: nil, afterDelay: self.duration)
+            }
         }
     }
     
